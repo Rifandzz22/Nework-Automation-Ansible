@@ -1,0 +1,23 @@
+---
+- name: Changing Hostname
+  become: yes
+  hosts: router
+  gather_facts: no
+  connection: network_cli
+
+  tasks:
+    - name: Configuring Hostname
+      ios_config:
+        lines: hostname {{ inventory_hostname}}
+        provider:
+          username: rifandi
+          password: rifandi
+          port: 22
+          auth_pass: cisco
+          authorize: yes
+        save_when: modified
+
+# [router]
+# 10.0.12.1
+# 10.0.12.2
+

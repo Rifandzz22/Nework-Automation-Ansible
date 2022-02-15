@@ -1,0 +1,29 @@
+---
+- name: Deleting Attribute on Interfaces
+  hosts: R2
+  connection: network_cli
+  become: yes
+  gather_facts: no
+
+  tasks:
+    - name: Delete Attributes of given Interfaces
+      ios_l3_interface:
+        aggregate:
+          - name: Ethernet0/3
+            state: absent
+        provider:
+          username: rifandi
+          password: rifandi
+          port: 22
+          auth_pass: cisco
+          authorize: yes
+      register: int
+
+    - debug:
+        var: int.commands
+
+      # ios_l3_interfaces:
+      #   config:
+      #     - name: Ethernet0/3
+      #   state: deleted
+      # register: int 

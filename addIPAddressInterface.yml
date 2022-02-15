@@ -1,0 +1,32 @@
+---
+- name: Connect to Router with SSH
+  hosts: R3
+  connection: network_cli
+
+  tasks:
+    - name: Add IP Address in Interface Ethernet 0/3 on R3
+      ios_config:
+        lines:
+          - no shutdown
+          - description Gateway for Network2
+          - ip address 192.168.2.1 255.255.255.0
+        parents: interface Ethernet0/3
+        provider:
+          username: rifandi
+          password: rifandi
+          port: 22
+          auth_pass: cisco
+          authorize: yes
+        save_when: modified
+
+      register: hasil_ip
+
+    - name: Changing IP output
+      debug:
+        var: hasil_ip.commands
+      # ios_l3_interfaces:
+      #   config:
+      #     - name: Ethernet0/3
+      #       ipv4:
+      #       - address: 192.168.2.1/24
+      #   state: merged

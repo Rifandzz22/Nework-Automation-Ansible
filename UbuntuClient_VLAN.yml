@@ -1,0 +1,27 @@
+---
+- name: Connect to Router with SSH
+  hosts: R2
+  connection: network_cli
+
+  tasks:
+    - name: Create DHCP for Network20 in R2
+      ios_config:
+        lines:
+          - network 192.168.20.0 255.255.255.0
+          - default-router 192.168.20.1
+          - dns-server 8.8.8.8
+          - ip dhcp excluded-address 192.168.20.1
+        parents: interface Ethernet0/3.20
+        provider:
+          username: rifandi
+          password: rifandi
+          port: 22
+          auth_pass: cisco
+          authorize: yes
+        save_when: modified
+
+      register: config
+
+    - name: Changing IP output
+      debug:
+        var: config.commands

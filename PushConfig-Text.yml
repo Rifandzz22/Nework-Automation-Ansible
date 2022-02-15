@@ -1,0 +1,13 @@
+---
+
+- hosts: router
+  connection: network_cli
+
+  tasks:
+  - name: Push config file 
+    ios_config:
+      src: "/etc/ansible/backupRouters/"
+
+  - name: save running to startup when modified
+    ios_config:
+      save_when: modified

@@ -1,0 +1,25 @@
+---
+- name: Connect to Router with SSH
+  hosts: router
+  connection: network_cli
+
+  tasks:
+    - name: Configure OSPF
+      ios_config:
+        lines:
+          - network 0.0.0.0 0.0.0.0 area 0
+          - passive-interface loopback 0
+        parents: router ospf 1
+        provider:
+          username: rifandi
+          password: rifandi
+          port: 22
+          auth_pass: cisco
+          authorize: yes
+        save_when: modified
+
+      register: hasil_ospf
+
+    - name: Changing IP output
+      debug:
+        var: hasil_ospf.commands
